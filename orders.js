@@ -59,8 +59,34 @@ async function list(options = {}) {
     return order
   }
 
+  async function edit (_id, change) {
+    const order = await get(_id)
+
+    if (!order) {
+      throw new Error("Order with id ${_id} not found");
+    }
+  
+    // todo can we use spread operators here?
+    Object.keys(change).forEach(function (key) {
+      order[key] = change[key]
+    })
+  
+    // Object.assign(product{...change});
+    
+    await order.save()
+  
+    return order
+  }
+  
+  async function destroy (_id) {
+    return await order.deleteOne({_id})
+  }
+
+
 module.exports = {
      create,
      get,
-     list
+     list,
+     edit,
+    destroy
 }
